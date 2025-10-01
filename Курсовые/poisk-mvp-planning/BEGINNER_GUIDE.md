@@ -1,5 +1,9 @@
 # Beginner Guide (Poisk MVP)
 
+> Навигация: [Воркбук](./workbook/Воркбук.md) · [WBS](./WBS_Детализация.md) · [Glossary](./Glossary.md)
+>
+> Raw: [Воркбук](./workbook/Воркбук.md) | [WBS](./WBS_Детализация.md) | [Glossary](./Glossary.md)
+
 Краткий маршрут для студента: с чего начать, что обязательно, а что можно отложить.
 
 ## 1. Цель за 5 минут
@@ -81,6 +85,92 @@ A: `WBS_Детализация.md`.
 
 Q: Как добавить новое поле в заявку?  
 A: Обнови миграцию/модель + валидации + описание в R1/R2.
+
+## 11. Инструменты для сокращения рутины
+
+Ниже — практические тулзы и приёмы, которые экономят время. Бери точечно под текущий этап (R1–R4), не ставь всё сразу.
+
+### 11.1 R1 (Модель данных, базовый REST)
+
+- ER / схема: dbdiagram.io, QuickDBD — хранить текстовую схему в `docs/schema/er.txt`.
+- Генерация миграций: Prisma (schema → миграции) или Sqitch (чистый SQL).
+- Генераторы кода: Plop.js / Hygen (шаблон контроллер + сервис + тест).
+- Моки/данные: json-server для прототипа, @faker-js/faker для сидов (`npm run seed`).
+- REST тестирование: VS Code REST Client (`api/requests.http`) или Bruno (хранится в git).
+- Форматирование и стиль: Prettier + ESLint + husky + lint-staged.
+
+### 11.2 R2 (Роли, детализация API, история)
+
+- Спека → типы: OpenAPI + openapi-typescript → `types/api.d.ts`.
+- Валидация: Zod схемы + генерация OpenAPI (openapi-zod) как единый источник.
+- Генерация клиента: openapi-generator-cli (папка `clients/ts/`).
+- Документация: Redoc CLI (статический `docs/public/api.html`).
+- Матрица прав автопроверка: кастомный тест + Casl (если динамика) или простые enum проверки.
+- Контроль зависимостей слоёв: dependency-cruiser (правило «UI не импортирует infra»).
+
+### 11.3 Асинхронность и устойчивость
+
+- Повторы: p-retry / async-retry для обёртки внешних вызовов.
+- Очереди (если появится фон): BullMQ (Redis) для задач (пересчёт отчётов, уведомления).
+
+### 11.4 R3 (НФ требования, отчёты, качество)
+
+- Тесты API: Jest + Supertest.
+- Изоляция сетевых вызовов (позже фронт): MSW или Nock.
+- Покрытие: c8 (ESM) или Istanbul.
+- Статический анализ: eslint-plugin-security, depcheck (неиспользуемые пакеты).
+- Производительность: autocannon (baseline latency), Clinic.js (узкие места).
+- Логирование: pino + pino-http + correlation id (middleware) + pino-pretty (dev только).
+- Метрики: prom-client → `/metrics` (дальше Prometheus + Grafana docker-compose при необходимости).
+- Лицензии: license-checker.
+- Changelog: conventional-changelog-cli + commitlint.
+
+### 11.5 R4 (Бонусы, экспорт, оптимизация)
+
+- Экспорт: json2csv / fast-csv, pdfkit (при необходимости PDF).
+- Кэширование: lru-cache (in-memory) или Redis + ioredis.
+- Rate limiting: express-rate-limit + express-slow-down.
+- Трассировка: OpenTelemetry SDK + Jaeger (docker all-in-one) локально.
+- API Drift тесты: Schemathesis (fuzz) + Dredd (консистентность реализации со спекой).
+- Контейнер безопасность: Trivy (fs/image scan).
+- SQL оптимизация: EXPLAIN (ANALYZE) скрипты + pgBadger анализ логов.
+- Bundle анализ (фронт): source-map-explorer, Lighthouse CI.
+
+### 11.6 Productivity (горизонтальные вещи)
+
+- Task runner: npm scripts / Just / Taskfile — унифицировать команды.
+- Генерация диаграмм: Mermaid CLI или Kroki (CI рендер PNG/SVG).
+- Орфография документации: cspell (добавить доменные термины).
+- Markdown автофикс: markdownlint-cli2 --fix в pre-commit.
+- ADR: adr-tools (`docs/adr/0001-используем-openapi.md`).
+- Live reload: nodemon или tsx watch (если TypeScript).
+- Env управление: dotenv-flow / direnv.
+- Диаграммы зависимостей: madge → `graph.png`.
+
+### 11.7 Быстрые победы (<= 1 час)
+
+1. Husky + lint-staged: блокируем мусор до commit.
+2. `api/requests.http`: мгновенный smoke для CRUD.
+3. `openapi/poisk.yaml` + генерация типов.
+4. pino + X-Request-Id middleware.
+5. `npm run benchmark` (autocannon) — фиксируем baseline.
+
+### 11.8 Мини дорожная карта внедрения
+
+- Неделя 1: Prettier/ESLint/husky + REST Client + pino.
+- Неделя 2: OpenAPI skeleton + openapi-typescript + первые Supertest.
+- Неделя 3: prom-client + rate-limit + autocannon baseline.
+- Неделя 4: Redoc build + Schemathesis smoke + Trivy.
+- Неделя 5+: OpenTelemetry + Grafana (если есть смысл).
+
+### 11.9 Ритуалы для устойчивости
+
+- Новая сущность → сначала схема в OpenAPI/Zod → генерация типов → реализация.
+- Новый endpoint → запись в `api/requests.http` → ручной test → автотест.
+- Существенное решение → ADR файл.
+- Производительность упала >20% от baseline → создаём задачу в WBS.
+
+> Подсказка: не внедряйте инструмент без явной окупаемости (время * частота). Если пользу сложно сформулировать одной строкой — отложите.
 
 Удачи! Начинай с малого — первая рабочая цепочка важнее количества кода.
 
