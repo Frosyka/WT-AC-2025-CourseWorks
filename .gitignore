@@ -1,0 +1,103 @@
+# ---- Node / TypeScript ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+*.tsbuildinfo
+
+# ---- Env / Secrets ----
+.env
+.env.local
+*.env.*.local
+.env.test
+!.env.example
+
+# ---- Logs ----
+logs/
+*.log
+log-*.txt
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ---- Build artifacts ----
+dist/
+build/
+coverage/
+.next/
+out/
+.vite-cache/
+.cache/
+.svelte-kit/
+.nuxt/
+storybook-static/
+
+# ---- IDE / Editor ----
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- TypeScript / TS tooling ----
+.turbo/
+.eslintcache
+
+# ---- Frontend assets ----
+*.local.js
+*.local.ts
+public/uploads/
+
+# ---- Backend runtime ----
+/tmp
+/uploads
+/storage
+
+# ---- Databases / Data ----
+*.db
+*.sqlite
+*.sqlite-journal
+pgdata/
+redis-data/
+mongo-data/
+
+# ---- Docker ----
+.docker/
+Dockerfile.local
+/docker-compose.override.yml
+
+# ---- Prisma / ORM ----
+prisma/migrations/**/README.md
+
+# ---- Tests ----
+.jest-cache/
+.jest/
+playwright-report/
+playwright/.cache
+coverage-final.json
+
+# ---- Kubernetes / Helm outputs ----
+charts/**/charts/
+charts/**/tmp/
+*.tgz
+
+# ---- Generated API clients ----
+packages/*/generated/
+
+# ---- Misc ----
+*.orig
+*.rej
+*.coverage
+
+# ---- OS ----
+Icon?
+Ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+

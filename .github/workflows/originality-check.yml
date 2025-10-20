@@ -1,0 +1,24 @@
+name: Duplicate Code Check
+
+on:
+  pull_request:
+    paths: ['students/**']
+
+jobs:
+  duplicate-code-check:
+    name: Check for duplicate code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Duplicate Code Detection
+        uses: platisd/duplicate-code-detection-tool@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directories: "students"
+          ignore_below: 20
+          fail_above: 70
+          warn_above: 20
+          file_extensions: "js, html, css"
+          one_comment: true
